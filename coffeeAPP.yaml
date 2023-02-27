@@ -1,0 +1,131 @@
+openapi: 3.0.0
+info:
+  title: Coffee App API
+  version: 1.0.0
+  description: An API for ordering and managing cups of Joe.
+
+servers:
+  - url: http://localhost:8000
+    description: Local server
+
+paths:
+  /coffee:
+    get:
+      summary: Get all coffee menu Items
+      description: Returns a list of all coffee orders.
+      responses:
+        '200':
+          description: list of coffee menu items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MenuItems'
+    post:
+      summary: Place the coffee order
+      description: Places the order for a cup of coffee.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '200':
+          description: Congratulations! Your order was submitted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoffeeRequest'
+        '400':
+          description: The request is missing required parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A description of the error.
+        '500':
+          description: An error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A description of the error.
+    delete:
+      summary: Delete coffee order
+      description: Delete all coffee order.
+      responses:
+        '204':
+          description: Coffee orders successfully deleted.
+
+  /coffee/{orderId}:
+    get:
+      summary: Get a coffee order by ID
+      description: Returns the coffee order with the specified ID.
+      parameters:
+        - in: path
+          name: orderId
+          description: The ID of the coffee order to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The coffee order with the specified ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoffeeOrder'
+        '404':
+          description: The coffee order with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A description of the error.
+        '500':
+          description: An error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A description of the error.
+    delete:
+      summary: Delete a coffee order by ID
+      description: Deletes the coffee order with the specified ID.
+      parameters:
+        - in: path
+          name: orderId
+          description: The ID of the coffee order to delete.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: The coffee order with the specified ID was successfully deleted.
+        '404':
+          description: The coffee order with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: A description of the error.
+        '500':
+          description: An error occurred while processing the request.
+          content
